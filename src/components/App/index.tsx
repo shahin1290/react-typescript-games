@@ -1,6 +1,6 @@
 import { FC, ReactNode, useEffect, useState, MouseEvent } from "react";
-import { Cell, CellState, Face } from "../../types";
-import { generateCells } from "../../utils";
+import { Cell, CellState, CellValue, Face } from "../../types";
+import { generateCells, openMultipleCells } from "../../utils";
 import Button from "../Button";
 import NumberDisplay from "../NumberDisplay";
 import "./App.scss";
@@ -42,6 +42,23 @@ const App: FC = () => {
   const handleCellClick = (rowParam: number, colParam: number) => (): void => {
     if (!live) {
       setLive(true);
+    }
+
+    const currentCell = cells[rowParam][colParam];
+    let newCells = cells.slice();
+
+    if ([CellState.flagged, CellState.visible].includes(currentCell.state)) {
+      return;
+    }
+
+    if (currentCell.value === CellValue.bomb) {
+      //todo
+    } else if (currentCell.value === CellValue.none) {
+      newCells = openMultipleCells(newCells, rowParam, colParam);
+      setCells(newCells);
+    } else {
+      newCells[rowParam][colParam].state = CellState.visible;
+      setCells(newCells);
     }
   };
   const handleCellContext =
