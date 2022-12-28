@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ChangeEvent } from "react";
 import styled from "@emotion/styled";
 
 export interface LevelProps {
@@ -6,10 +6,18 @@ export interface LevelProps {
    * Array of possible game levels
    */
   children: string[];
+  /**
+   * Default value
+   */
+  value?: string;
+  /**
+   * Select new lvl handler
+   */
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export const Level: FC<LevelProps> = ({ children }) => (
-  <Select>
+export const Level: FC<LevelProps> = ({ children, value, onChange }) => (
+  <Select onChange={onChange} value={value}>
     {children.map((item: string) => (
       <Option key={item} value={item}>
         {item}
@@ -20,7 +28,7 @@ export const Level: FC<LevelProps> = ({ children }) => (
 
 const Select = styled.select`
   margin: 0;
-  height: 2.5vw;
+  height: 100%;
   border-radius: 0;
   border: 0.15vw solid;
   border-color: white #9e9e9e #9e9e9e white;
